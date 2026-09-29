@@ -1,2 +1,2 @@
-This project is a part of the overall Movie Review system that is focused on creating a platform (an administrative dashboard) for managing movie data.
-The system allows administrators to add, edit, and delete movie reviews as well as allow critics to manage their own reviews.
+This project is a part of the overall Book Review system that is focused on creating a platform (an administrative dashboard) for managing book data.
+The system allows administrators to add, edit, and delete book reviews as well as allow critics to manage their own reviews.
