@@ -1,59 +1,36 @@
 @model IEnumerable<BooksAdmin.Models.Book>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "GoodReads";
 }
 
-<h1>Index</h1>
+<h1>All Books</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class = "btn btn-primary" asp-action="Create">Add a book</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Author)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Genre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.YearPublished)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(model => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Author)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Genre)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.YearPublished)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+<div class="row g-3">
+    @foreach (var book in Model)
+    {
+        <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="card h-100">
+                <img class="card-img" alt="Cover of @book.Title"
+                     src="@(book.CoverImageUrl ?? "https://placehold.co/200x300?text=No+cover")"
+                     onerror="this.onerror=null; this.src='https://placehold.co/200x300?text=No+cover'" />
+
+                <div class="card-body">
+                    <h5 class="card-title">@book.Title</h5>
+                    <p class="card-text">@book.Author</p>
+                    <p class="card-text">@book.Genre</p>
+                    <p class="card-text">@book.YearPublished</p>
+                </div>
+                <div class="card-footer">
+                    <a asp-action="Details" asp-route-id="@book.Id" class="btn btn-sm btn-outline-secondary">Details</a>
+                    <a asp-action="Edit" asp-route-id="@book.Id" class="btn btn-sm btn-secondary">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@book.Id" class="btn btn-sm btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

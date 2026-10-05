@@ -17,6 +17,7 @@
             @Html.DisplayFor(model => model.Title)
         </dd>
     </dl>
+    <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Author)
         </dt>
@@ -24,6 +25,7 @@
             @Html.DisplayFor(model => model.Author)
         </dd>
     </dl>
+    <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Genre)
         </dt>
@@ -31,6 +33,7 @@
             @Html.DisplayFor(model => model.Genre)
         </dd>
     </dl>
+    <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Description)
         </dt>
@@ -38,12 +41,29 @@
             @Html.DisplayFor(model => model.Description)
         </dd>
     </dl>
+    <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.YearPublished)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.YearPublished)
         </dd>
+    </dl>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Isbn)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Isbn)
+        </dd>
+    </dl>
+    <dl class="row">
+    <dt class="col-sm-2">Cover</dt>
+    <dd class="col-sm-10">
+            <img class="card-img" alt="Cover of @Model.Title"
+                 src="@(Model.CoverImageUrl ?? "https://placehold.co/200x300?text=No+cover")"
+                 onerror="this.onerror=null; this.src='https://placehold.co/200x300?text=No+cover'" />
+    </dd>
     </dl>
 </div>
 <div>

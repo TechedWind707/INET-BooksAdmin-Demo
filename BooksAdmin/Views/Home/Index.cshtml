@@ -1,8 +1,39 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to my Book Reviews App 🙂</h1>
-    <p>See all the books in the <a href="#/books">database</a>.</p>
-</div>
+<section class="home-hero text-center">
+    <h1 class="display-4">Find your next good read</h1>
+    <p class="lead">Keep track of the books you love, the ones on your list, and what you thought of them.</p>
+    <div class="d-flex justify-content-center gap-2 mt-4">
+        <a class="btn btn-dark btn-lg" asp-controller="Books" asp-action="Index">Browse books</a>
+        <a class="btn btn-outline-dark btn-lg" asp-controller="Books" asp-action="Create">Add a book</a>
+    </div>
+</section>
+
+<section class="row g-4 mt-4">
+    <div class="col-md-4">
+        <div class="card h-100 home-card">
+            <div class="card-body">
+                <h5 class="card-title">Browse</h5>
+                <p class="card-text">See every book in the collection with its cover, author and year.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 home-card">
+            <div class="card-body">
+                <h5 class="card-title">Add</h5>
+                <p class="card-text">Add a book in a few seconds. Give it an ISBN and the cover shows up on its own.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 home-card">
+            <div class="card-body">
+                <h5 class="card-title">Review</h5>
+                <p class="card-text">Coming soon: write reviews and rate the books you've read.</p>
+            </div>
+        </div>
+    </div>
+</section>
