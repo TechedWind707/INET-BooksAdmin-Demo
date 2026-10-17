@@ -10,6 +10,15 @@
 <div>
     <h4>@Html.DisplayFor(model => model.Title)</h4>
     <hr />
+     <dl class="row">
+    <dt class="col-sm-2">Cover</dt>
+    <dd class="col-sm-10">
+        <img class="card-img" alt="Cover of @Model.Title"
+             src="@(Model.UploadedCoverUrl ?? Model.CoverImageUrl ?? "https://placehold.co/200x300?text=No+cover")"
+             onerror="this.onerror=null; this.src='https://placehold.co/200x300?text=No+cover'" />
+    </dd>
+    </dl>
+
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Title)
@@ -50,6 +59,7 @@
             @Html.DisplayFor(model => model.YearPublished)
         </dd>
     </dl>
+
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |

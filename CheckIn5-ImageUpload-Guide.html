@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Check-in 5: Book Cover Upload Guide</title>
+  <style>
+    :root { color-scheme: dark; --bg:#101827; --card:#182235; --line:#2d3b55; --ink:#eef4ff; --muted:#afbdd4; --accent:#70d6a8; --warn:#ffd36b; --bad:#ff8b8b; }
+    * { box-sizing:border-box; }
+    body { margin:0; font:16px/1.55 system-ui,Segoe UI,sans-serif; color:var(--ink); background:linear-gradient(135deg,#0b1321,#131e31 65%,#0b1321); }
+    main { max-width:1000px; margin:auto; padding:28px 18px 70px; }
+    h1 { font-size:clamp(2rem,5vw,3.6rem); line-height:1.05; margin:0 0 12px; }
+    h2 { margin-top:0; font-size:1.45rem; }
+    h3 { margin:20px 0 7px; font-size:1.05rem; }
+    p, li { color:var(--muted); }
+    .hero, section { border:1px solid var(--line); background:rgba(24,34,53,.92); border-radius:16px; padding:24px; margin:18px 0; box-shadow:0 12px 30px rgba(0,0,0,.16); }
+    .tag { display:inline-block; padding:3px 9px; border-radius:999px; background:#263a58; color:#b9d7ff; font-size:.8rem; font-weight:700; letter-spacing:.04em; }
+    .flow { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin:20px 0 0; }
+    .flow div { padding:12px 9px; min-height:86px; border-radius:10px; background:#22304a; text-align:center; font-size:.9rem; }
+    .flow strong { display:block; color:var(--accent); }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:14px; }
+    .box { border:1px solid var(--line); border-radius:11px; padding:15px; background:#121d2e; }
+    .good { border-left:4px solid var(--accent); padding-left:14px; }
+    .warning { border-left:4px solid var(--warn); padding-left:14px; }
+    .danger { border-left:4px solid var(--bad); padding-left:14px; }
+    code { color:#c8f4da; background:#0e1725; padding:2px 5px; border-radius:4px; overflow-wrap:anywhere; }
+    pre { margin:10px 0; padding:14px; overflow:auto; background:#0c1421; border:1px solid #283650; border-radius:9px; color:#d5e5ff; }
+    button { cursor:pointer; color:#07150f; background:var(--accent); border:0; border-radius:8px; padding:8px 12px; font-weight:700; }
+    .step { border-bottom:1px solid var(--line); padding:16px 0; }
+    .step:last-child { border-bottom:0; }
+    .step-head { display:flex; align-items:center; gap:11px; }
+    input[type="checkbox"] { width:20px; height:20px; accent-color:var(--accent); }
+    .done { opacity:.55; }
+    .answer { display:none; margin-top:10px; padding:11px; background:#0d1c2a; border-radius:8px; color:#d5e5ff; }
+    .answer.show { display:block; }
+    table { width:100%; border-collapse:collapse; margin:12px 0; }
+    th, td { padding:10px; border-bottom:1px solid var(--line); vertical-align:top; text-align:left; }
+    th { color:#c9d9f5; }
+    .progress { height:10px; border-radius:99px; background:#0d1521; overflow:hidden; margin:10px 0 4px; }
+    #bar { height:100%; width:0; background:var(--accent); transition:width .2s; }
+    small { color:var(--muted); }
+    @media (max-width:680px) { .flow { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="hero">
+      <span class="tag">INET 2005 · Check-in 5</span>
+      <h1>Upload book covers to Azurite</h1>
+      <p>Goal: choose an image on Create, store the image in local Azure Blob Storage, save its URL with the book, then show a small cover on Index and a larger cover on Details.</p>
+      <div class="flow">
+        <div><strong>1. Browser</strong>chooses a file</div>
+        <div><strong>2. Controller</strong>receives the file</div>
+        <div><strong>3. Service</strong>uploads it</div>
+        <div><strong>4. Azurite</strong>stores the bytes</div>
+        <div><strong>5. SQL + Views</strong>save and show URL</div>
+      </div>
+    </header>
+
+    <section>
+      <h2>What your project has now</h2>
+      <div class="grid">
+        <div class="box good"><strong>Already working</strong><p>Your card layout already renders an image on Index and Details. It currently gets that image from Open Library using the ISBN.</p></div>
+        <div class="box warning"><strong>Missing for this check-in</strong><p>No Azure Blob package, service registration, upload form encoding, file parameter, or database field for the uploaded image URL exists yet.</p></div>
+        <div class="box danger"><strong>Important demo gap</strong><p>The class demo has a blob service and file input, but its Create action currently does not call the service. Do not copy it blindly.</p></div>
+      </div>
+      <p>Your current computed property is <code>CoverImageUrl</code> in <code>BooksAdmin/Models/Book.cs</code>. It is marked <code>[NotMapped]</code>, meaning SQL never stores it. For an uploaded cover, you need a separate persisted URL property.</p>
+    </section>
+
+    <section>
+      <h2>Before coding: prove storage is reachable</h2>
+      <p>Azurite is already running in Docker as <code>Azurite1</code>. Its Blob port is mapped from Docker's <code>10000</code> to your computer's <code>10006</code>.</p>
+      <div class="warning"><strong>Do not use <code>UseDevelopmentStorage=true</code> here.</strong><br>That shortcut expects host port <code>10000</code>, but your container is exposed on <code>10006</code>.</div>
+      <h3>Connection string shape</h3>
+      <p>Use the standard Azurite account name, default account key, and this endpoint:</p>
+      <pre>BlobEndpoint=http://127.0.0.1:10006/devstoreaccount1;</pre>
+      <p>Add that endpoint to the Azure storage connection string. Keep the whole connection string in user secrets or <code>appsettings.Development.json</code>, never the production <code>appsettings.json</code>.</p>
+      <p><strong>Reason:</strong> your app connects from the Windows host, not from inside Docker. It must use the host-side port <code>10006</code>.</p>
+    </section>
+
+    <section>
+      <h2>Build order</h2>
+      <p>Do one row at a time. Check it off only after it compiles or behaves as expected.</p>
+      <div class="progress"><div id="bar"></div></div><small id="progressText">0 / 9 complete</small>
+
+      <article class="step"><div class="step-head"><input id="s1" type="checkbox"><label for="s1"><strong>1. Add the Azure Blob SDK</strong></label></div><p>In the <code>BooksAdmin</code> project folder, add the same NuGet package the demo uses: <code>Azure.Storage.Blobs</code>. Restore/build before continuing.</p><button data-answer="a1">Why first?</button><div id="a1" class="answer">The service cannot compile until <code>BlobServiceClient</code> exists in the project.</div></article>
+
+      <article class="step"><div class="step-head"><input id="s2" type="checkbox"><label for="s2"><strong>2. Add local configuration</strong></label></div><p>Create an <code>AzureStorage</code> configuration section with two values: the full connection string and a lowercase container name such as <code>book-covers</code>. Use the port <code>10006</code>.</p><p class="warning">The demo's <code>appsettings.json</code> has a typo before <code>ContainerName</code>. Your key must be exactly <code>AzureStorage:ContainerName</code>.</p></article>
+
+      <article class="step"><div class="step-head"><input id="s3" type="checkbox"><label for="s3"><strong>3. Create the service boundary</strong></label></div><p>Create a <code>Services</code> folder. Make an interface with one async upload operation, then implement it with <code>BlobServiceClient</code>. Follow the demo's constructor and upload flow, but make it your own.</p><table><tr><th>Service job</th><th>Controller should not do this</th></tr><tr><td>Read configuration</td><td>Know connection-string details</td></tr><tr><td>Get/create the container</td><td>Build Azure SDK clients</td></tr><tr><td>Upload stream and return URL</td><td>Talk to Blob Storage directly</td></tr></table><p class="warning">Add a container-create call before upload. The demo only gets a container client; that does not create the container.</p></article>
+
+      <article class="step"><div class="step-head"><input id="s4" type="checkbox"><label for="s4"><strong>4. Register the service</strong></label></div><p>In <code>Program.cs</code>, import your Services namespace and register the interface with its implementation before <code>builder.Build()</code>. Then change the controller constructor to request the interface, not the concrete class.</p><button data-answer="a4">Why use the interface?</button><div id="a4" class="answer">ASP.NET creates the service for the controller. Depending on the interface keeps the controller focused on book rules and makes storage replaceable later.</div></article>
+
+      <article class="step"><div class="step-head"><input id="s5" type="checkbox"><label for="s5"><strong>5. Decide what SQL stores</strong></label></div><p>Add a nullable string property to <code>Book</code>, named clearly for the uploaded Blob URL. This is the URL returned by your storage service, not the image bytes and not an <code>IFormFile</code>.</p><p>Keep <code>CoverImageUrl</code> if you want the ISBN lookup as a fallback. Update the views to prefer the uploaded URL, then fall back to the ISBN URL, then the placeholder.</p><p>Run an Entity Framework migration and update the database. Confirm the new nullable column appears in your Books table.</p></article>
+
+      <article class="step"><div class="step-head"><input id="s6" type="checkbox"><label for="s6"><strong>6. Make Create send the image</strong></label></div><p>In <code>Views/Books/Create.cshtml</code>, change the form to multipart form data. Add a file input named exactly the same as the controller's file parameter. Restrict the picker to image MIME types if your instructor expects it.</p><p class="danger"><strong>Name matching rule:</strong> the input <code>name</code> and controller file-parameter name must match exactly. If they differ, ASP.NET gives you <code>null</code>.</p></article>
+
+      <article class="step"><div class="step-head"><input id="s7" type="checkbox"><label for="s7"><strong>7. Update the Create action</strong></label></div><p>Add an <code>IFormFile</code> parameter. When the normal model is valid and a non-empty file was supplied: generate a safe unique blob name, upload through your service, place the returned URL in the persisted Book property, then save the Book.</p><p>Do not use the browser's original filename as the final blob name. Two students could upload <code>cover.jpg</code>; a generated unique name prevents one upload from overwriting another.</p><button data-answer="a7">What order prevents a missing URL?</button><div id="a7" class="answer">Upload first, assign the returned URL to the book, then save the book. Otherwise SQL can save a book before it knows where its image lives.</div></article>
+
+      <article class="step"><div class="step-head"><input id="s8" type="checkbox"><label for="s8"><strong>8. Render two sizes</strong></label></div><p>In Index, use an image element with a fixed thumbnail size and <code>object-fit: cover</code>. In Details, use the same chosen URL at a larger maximum width. Keep meaningful <code>alt</code> text using the book title.</p><p>Test a book with an upload, a book with only an ISBN, and a book with neither. Each needs a useful result.</p></article>
+
+      <article class="step"><div class="step-head"><input id="s9" type="checkbox"><label for="s9"><strong>9. Run the proof test</strong></label></div><ol><li>Start Docker and confirm <code>Azurite1</code> is running.</li><li>Run the BooksAdmin app.</li><li>Create a new book and choose a small PNG or JPG.</li><li>Confirm Index shows its thumbnail.</li><li>Open Details and confirm the larger image loads.</li><li>Use Azure Storage Explorer or Azurite tooling to verify the blob exists in <code>book-covers</code>.</li></ol></article>
+    </section>
+
+    <section>
+      <h2>Failure map</h2>
+      <table><thead><tr><th>Symptom</th><th>First thing to check</th></tr></thead><tbody>
+        <tr><td><code>IFormFile</code> is null</td><td>Form has <code>enctype="multipart/form-data"</code>; input name equals action parameter name.</td></tr>
+        <tr><td>Connection refused</td><td>Docker container is running and your endpoint uses <code>127.0.0.1:10006</code>, not <code>10000</code>.</td></tr>
+        <tr><td>Container not found</td><td>Service creates the container before it gets the blob client.</td></tr>
+        <tr><td>Book saves, no cover</td><td>Returned blob URL is assigned to the persisted Book URL property before saving.</td></tr>
+        <tr><td>Old ISBN cover still shows</td><td>View chooses the new uploaded URL before <code>CoverImageUrl</code>.</td></tr>
+        <tr><td>Build fails on Blob classes</td><td>NuGet package restored and the Azure Storage namespace imported.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section>
+      <h2>One-minute reasoning drill</h2>
+      <p>Answer without looking back, then reveal the check.</p>
+      <div class="box"><strong>Question:</strong> Why should the database store the blob URL instead of the raw image file?<br><button data-answer="drill">Reveal answer</button><div id="drill" class="answer">SQL keeps a small pointer that identifies the image. Azurite is built to store file bytes. This keeps each system doing one job and lets the views load the image using its URL.</div></div>
+      <p class="good"><strong>Your next action:</strong> complete steps 1–3 only. Build after step 3. If it passes, tell me what your service's upload method needs as input and what it returns.</p>
+    </section>
+  </main>
+  <script>
+    const boxes = [...document.querySelectorAll('input[type="checkbox"]')];
+    const update = () => {
+      const done = boxes.filter(box => box.checked).length;
+      document.getElementById('bar').style.width = `${done / boxes.length * 100}%`;
+      document.getElementById('progressText').textContent = `${done} / ${boxes.length} complete`;
+      boxes.forEach(box => box.closest('.step').classList.toggle('done', box.checked));
+      localStorage.setItem('checkIn5Progress', boxes.map(box => box.checked ? '1' : '0').join(''));
+    };
+    const saved = localStorage.getItem('checkIn5Progress') || '';
+    boxes.forEach((box, index) => { box.checked = saved[index] === '1'; box.addEventListener('change', update); });
+    document.querySelectorAll('[data-answer]').forEach(button => button.addEventListener('click', () => document.getElementById(button.dataset.answer).classList.toggle('show')));
+    update();
+  </script>
+</body>
+</html>

@@ -1,8 +1,11 @@
+using BooksAdmin.Services;
 using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("BooksAdminContext") ?? throw new InvalidOperationException("Connection string 'BooksAdminContext' not found.");
 
 builder.Services.AddDbContext<BooksAdminContext>(options => options.UseSqlServer(connectionString));
+//Register file upload service
+builder.Services.AddScoped<IAzureBlobService, AzureBlobService>();
 
 builder.Services.AddControllersWithViews();
 

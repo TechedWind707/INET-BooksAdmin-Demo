@@ -37,8 +37,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .card-img {
-  width: 115px;
-  height: 180px;
+  width: auto;
+  height: 90px;
   object-fit: cover;
 }
 
@@ -65,3 +65,156 @@ h1, h2, h3, h4, h5, h6 {
 .home-card {
     border-color: #e9e4dc;
 }
+
+#Isbn {
+    field-sizing: content;
+    min-width: 440px
+}
+
+.row.g-3 table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: linear-gradient(180deg, #ffffff 0%, #faf8f6 100%);
+    border: 1px solid #e9e4dc;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(56,33,16,0.06);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    color: #4f4f4d;
+}
+
+    /* Header */
+    .row.g-3 table thead th {
+        background: #faf8f6;
+        color: #382110;
+        font-weight: 700;
+        padding: 14px 18px;
+        text-align: left;
+        font-size: 0.95rem;
+        border-bottom: 1px solid #e9e4dc;
+        font-family: "Merriweather", Georgia, "Times New Roman", serif;
+    }
+
+    /* Body cells */
+    .row.g-3 table tbody td {
+        padding: 12px 18px;
+        vertical-align: middle;
+        border-bottom: 1px solid rgba(233,228,220,0.7); /* warm divider */
+        color: #4f4f4d;
+        font-size: 0.95rem;
+    }
+
+    /* Last row no border */
+    .row.g-3 table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* Cover image */
+    .row.g-3 table img.card-img {
+        width: 72px;
+        height: 108px;
+        object-fit: cover;
+        border-radius: 6px;
+        box-shadow: 0 4px 10px rgba(56,33,16,0.06);
+        display: block;
+        background: #fff;
+    }
+
+/* Title emphasis */
+.row.g-3 .card-title {
+    margin: 0;
+    font-size: 1.05rem;
+    color: #382110;
+    font-family: "Merriweather", Georgia, "Times New Roman", serif;
+}
+
+/* Subtitle / metadata */
+.row.g-3 .card-text {
+    margin: 0;
+    color: #6b5b4a;
+}
+
+/* Buttons cell spacing */
+.row.g-3 tbody td > a.btn {
+    margin-right: 6px;
+    margin-bottom: 4px;
+    border-radius: 6px;
+}
+
+/* Row hover — warm subtle lift */
+.row.g-3 table tbody tr:hover {
+    background: linear-gradient(90deg, rgba(250,248,246,0.6), rgba(255,255,255,0.9));
+    transform: translateY(-1px);
+    transition: background-color .14s ease, transform .12s ease;
+}
+
+/* Small screen: convert table rows into stacked cards (keep behavior but match theme) */
+@media (max-width: 760px) {
+    .row.g-3 table,
+    .row.g-3 thead,
+    .row.g-3 tbody,
+    .row.g-3 th,
+    .row.g-3 td,
+    .row.g-3 tr {
+        display: block;
+        width: 100%;
+    }
+
+    .row.g-3 thead {
+        display: none;
+    }
+
+    .row.g-3 tbody tr {
+        margin-bottom: 12px;
+        background: linear-gradient(180deg,#fff,#faf8f6);
+        padding: 12px;
+        border-radius: 10px;
+        box-shadow: 0 6px 18px rgba(56,33,16,0.04);
+        border: 1px solid #efe9e2;
+    }
+
+    .row.g-3 tbody td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: none;
+    }
+
+        .row.g-3 tbody td:first-child {
+            flex: 0 0 auto;
+            padding-right: 12px;
+        }
+
+        .row.g-3 tbody td:nth-child(2),
+        .row.g-3 tbody td:nth-child(3),
+        .row.g-3 tbody td:nth-child(4),
+        .row.g-3 tbody td:nth-child(5) {
+            flex: 1 1 auto;
+            text-align: left;
+            padding-left: 6px;
+        }
+
+        .row.g-3 tbody td:last-child {
+            display: flex;
+            gap: 6px;
+            justify-content: flex-end;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+    .row.g-3 table img.card-img {
+        width: 68px;
+        height: 100px;
+    }
+}
+
+.btn-primary {
+    background-color: #382110
+}
+
+.btn-primaryg:hover {
+        background-color: #ffffff;
+        color: #382110;
+    }

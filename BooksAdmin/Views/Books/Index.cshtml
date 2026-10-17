@@ -7,16 +7,17 @@
 <h1>All Books</h1>
 
 <p>
-    <a class = "btn btn-primary" asp-action="Create">Add a book</a>
+    <a class = "btn-primary btn" asp-action="Create">Add a book</a>
 </p>
 
 <div class="row g-3">
     @foreach (var book in Model)
     {
-        <div class="col-sm-6 col-md-4 col-lg-3">
+
+  /*      <div class="col-sm-6 col-md-4 col-lg-3">
             <div class="card h-100">
                 <img class="card-img" alt="Cover of @book.Title"
-                     src="@(book.CoverImageUrl ?? "https://placehold.co/200x300?text=No+cover")"
+                     src="@(book.UploadedCoverUrl??book.CoverImageUrl ?? "https://placehold.co/200x300?text=No+cover")"
                      onerror="this.onerror=null; this.src='https://placehold.co/200x300?text=No+cover'" />
 
                 <div class="card-body">
@@ -32,5 +33,41 @@
                 </div>
             </div>
         </div>
+*/
+
+    <table>
+  <thead>
+    <tr>
+      <th>Cover</th>
+      <th>Title</th>
+      <th>Author</th>
+      <th>Genre</th>
+      <th>Year Published</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+          <img class="card-img"
+          alt="Cover of @book.Title"
+          src="@(book.UploadedCoverUrl??book.CoverImageUrl ?? "https://placehold.co/200x300?text=No+cover")"
+         onerror="this.onerror=null; this.src='https://placehold.co/200x300?text=No+cover'"
+         />
+      </td>
+      <td><h3 class="card-title">@book.Title</h3></td>
+      <td><p class="card-text">@book.Author</p></td>
+      <td><p class="card-text">@book.Genre</p></td>
+      <td><p class="card-text">@book.YearPublished</p></td>
+      <td>
+          <div style="display:flex; flex-direction:column; gap:10px">
+          <a asp-action="Details" asp-route-id="@book.Id" class="btn btn-sm btn-outline-secondary">Details</a>
+          <a asp-action="Edit" asp-route-id="@book.Id" class="btn btn-sm btn-secondary">Edit</a>
+          <a asp-action="Delete" asp-route-id="@book.Id" class="btn btn-sm btn-danger">Delete</a>
+        </div>
+     </td>
+    </tr>
+  </tbody>
+</table>       
+
     }
 </div>

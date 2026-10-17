@@ -10,9 +10,14 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            
+            <img class="card-img" alt="Cover of @Model.Title"
+             src="@(Model.UploadedCoverUrl ?? Model.CoverImageUrl ?? "https://placehold.co/200x300?text=No+cover")"
+             onerror="this.onerror=null; this.src='https://placehold.co/200x300?text=No+cover'" />
+
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />
@@ -43,6 +48,11 @@
                 <input asp-for="Isbn" class="form-control" />
                 <span asp-validation-for="Isbn" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label class="control-label">Image</label>
+                <input type="file" name="ImageFile" class="form-control"/>
+            </div>
+            <br/>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

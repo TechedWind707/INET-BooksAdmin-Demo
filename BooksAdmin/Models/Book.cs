@@ -24,12 +24,14 @@ namespace BooksAdmin.Models
         [Range(1900, 2100, ErrorMessage = "Year must be between 1900 and 2100")]
         public int YearPublished { get; set; }
 
-        [Display(Prompt = "Optional: add it to fetch the cover image.")]
+        public string? UploadedCoverUrl { get; set; } = string.Empty;
+
+        [Display(Prompt = "Optional: To fetch the cover image without uploading a file.")]
         [RegularExpression(
         @"^(?:ISBN(?:-1[03])?:?\s)?(?:(?:97[89][- ]?)?[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[0-9X]|[0-9]{9}[0-9X])$",
         ErrorMessage = "Invalid ISBN format.")]
         public string? Isbn { get; set; } = string.Empty;
-        
+
         [NotMapped]
         public string? CoverImageUrl =>
        string.IsNullOrWhiteSpace(Isbn) ? null
