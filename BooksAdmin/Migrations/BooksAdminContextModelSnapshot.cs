@@ -20,6 +20,23 @@ namespace BooksAdmin.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("BooksAdmin.Models.AudienceCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AudienceCategory");
+                });
+
             modelBuilder.Entity("BooksAdmin.Models.Book", b =>
                 {
                     b.Property<int>("Id")
@@ -27,6 +44,9 @@ namespace BooksAdmin.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AudienceCategoryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Author")
                         .IsRequired()
@@ -37,9 +57,8 @@ namespace BooksAdmin.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<string>("Genre")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("GenreId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Isbn")
                         .HasColumnType("nvarchar(max)");
@@ -56,7 +75,57 @@ namespace BooksAdmin.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AudienceCategoryId");
+
+                    b.HasIndex("GenreId");
+
                     b.ToTable("Book");
+                });
+
+            modelBuilder.Entity("BooksAdmin.Models.Genre", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Genre");
+                });
+
+            modelBuilder.Entity("BooksAdmin.Models.Book", b =>
+                {
+                    b.HasOne("BooksAdmin.Models.AudienceCategory", "AudienceCategory")
+                        .WithMany("Books")
+                        .HasForeignKey("AudienceCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BooksAdmin.Models.Genre", "Genre")
+                        .WithMany("Books")
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AudienceCategory");
+
+                    b.Navigation("Genre");
+                });
+
+            modelBuilder.Entity("BooksAdmin.Models.AudienceCategory", b =>
+                {
+                    b.Navigation("Books");
+                });
+
+            modelBuilder.Entity("BooksAdmin.Models.Genre", b =>
+                {
+                    b.Navigation("Books");
                 });
 #pragma warning restore 612, 618
         }

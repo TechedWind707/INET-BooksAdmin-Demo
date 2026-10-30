@@ -1,3 +1,4 @@
+@using Microsoft.AspNetCore.Html
 @model BooksAdmin.Models.Book
 
 @{
@@ -14,8 +15,8 @@
     <dt class="col-sm-2">Cover</dt>
     <dd class="col-sm-10">
         <img style="width: auto; height: 300px; object-fit: cover;" class="card-img" alt="Cover of @Model.Title"
-             src="@(Model.UploadedCoverUrl ?? Model.CoverImageUrl ?? "https://placehold.co/200x300?text=No+cover")"
-             onerror="this.onerror=null; this.src='https://placehold.co/200x300?text=No+cover'" />
+             src="@(Model.UploadedCoverUrl)"
+                 onerror="this.onerror=null; this.src='@(Model.CoverImageUrl ?? "https://placehold.co/200x300?text=No+cover")'" />
     </dd>
     </dl>
 
@@ -35,20 +36,28 @@
             @Html.DisplayFor(model => model.Author)
         </dd>
     </dl>
-    <dl class="row">
+    @* <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Genre)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Genre)
         </dd>
-    </dl>
+    </dl> *@
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Description)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
+            @* @Html.DisplayFor(model => model.Description) *@
+            @{
+                var descriptionWithBreaks = new HtmlString(Model.Description
+                .Replace("\r\n", "<br />")
+                .Replace("\n", "<br />")
+                .Replace("\r", "<br />"));
+            }
+
+           @descriptionWithBreaks
         </dd>
     </dl>
     <dl class="row">
@@ -65,6 +74,24 @@
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Isbn)
+        </dd>
+    </dl>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @* @Html.DisplayNameFor(model => model.Genre.Title) *@
+            Genre
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Genre.Title)
+        </dd>
+    </dl>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @* @Html.DisplayNameFor(model => model.AudienceCategory.Title) *@
+            Audience Category
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.AudienceCategory.Title)
         </dd>
     </dl>
 

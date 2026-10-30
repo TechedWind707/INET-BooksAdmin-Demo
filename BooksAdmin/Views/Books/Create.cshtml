@@ -1,10 +1,11 @@
 @model BooksAdmin.Models.Book
 
+
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Add New Book</h1>
 
 <h4>Book</h4>
 <hr />
@@ -13,48 +14,59 @@
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group">
+            <div class="mb-3">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control"/>
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
+            <div class="mb-3">
                 <label asp-for="Author" class="control-label"></label>
                 <input asp-for="Author" class="form-control"/>
                 <span asp-validation-for="Author" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Genre" class="control-label"></label>
-                <input asp-for="Genre" class="form-control"/>
-                <span asp-validation-for="Genre" class="text-danger"></span>
+             <div class="mb-3">
+                <label asp-for="GenreId" class="control-label">Genre</label>
+                <select asp-for="GenreId" class="form-select" asp-items="ViewBag.GenreId">
+                    <option value="" disabled selected hidden>Please select an option</option>
+                </select>
+                <span asp-validation-for="GenreId" class="text-danger"></span>
             </div>
 
-           <div class="form-group">
+            <div class="mb-3">
+                <label asp-for="AudienceCategoryId" class="control-label">Audience Category</label>
+                <select asp-for="AudienceCategoryId" class="form-select" asp-items="ViewBag.AudienceCategoryId">
+                    <option value="" disabled selected hidden>Please select an option</option>
+                </select>
+                <span asp-validation-for="AudienceCategoryId" class="text-danger"></span>
+            </div>
+
+           <div class="mb-3">
                 <label asp-for="Description" class="control-label"></label>
                 <textarea asp-for="Description" class="form-control"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             
-            <div class="form-group">
-                <label asp-for="Isbn" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="Isbn" class="control-label">ISBN</label>
                 <input asp-for="Isbn" class="form-control"/>
                 <span asp-validation-for="Isbn" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="YearPublished" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="YearPublished" class="control-label">Year Published</label>
                 <input asp-for="YearPublished" class="form-control"/>
                 <span asp-validation-for="YearPublished" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
+            <div class="mb-3">
                 <label class="control-label">Image</label>
-                <input type="file" name="ImageFile" class="form-control"/>
+                <input accept="image/*" type="file" id="ImageFile" name="ImageFile" class="form-control"/>
+                @Html.ValidationMessage("ImageFile", new { @class = "text-danger" })
             </div>
             <br/>
-            <div class="form-group">
+            <div class="mb-3">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>

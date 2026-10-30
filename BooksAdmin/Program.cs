@@ -1,5 +1,6 @@
 using BooksAdmin.Services;
 using Microsoft.EntityFrameworkCore;
+//using System.Net.Http;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("BooksAdminContext") ?? throw new InvalidOperationException("Connection string 'BooksAdminContext' not found.");
 
@@ -8,6 +9,7 @@ builder.Services.AddDbContext<BooksAdminContext>(options => options.UseSqlServer
 builder.Services.AddScoped<IAzureBlobService, AzureBlobService>();
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 

@@ -1,12 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BooksAdmin.Models
 {
     public class Book
     {
+        //primary key
         public int Id { get; set; }
 
+        [ValidateNever]
+        public Genre Genre { get; set; } = null!;
+        public int GenreId { get; set; }
+        [ValidateNever]
+        public AudienceCategory AudienceCategory { get; set; } = null!;
+        public int AudienceCategoryId { get; set; }
         [Required]
         [Display(Prompt = "Title..")]
         public string Title { get; set; } = string.Empty;
@@ -14,8 +22,9 @@ namespace BooksAdmin.Models
         [Required]
         public string Author { get; set; } = string.Empty;
 
-        [Required]
-        public string Genre { get; set; } = string.Empty;
+
+        //        [Required]
+        //        public string Genre { get; set; } = string.Empty;
 
         [StringLength(1000)]
         public string Description { get; set; } = string.Empty;
