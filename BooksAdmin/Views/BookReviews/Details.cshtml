@@ -1,0 +1,51 @@
+@using Microsoft.AspNetCore.Html
+@model BooksAdmin.Models.BookReview
+
+@{
+    ViewData["Title"] = "Review Details";
+}
+
+<h1>Review Details</h1>
+
+<div>
+    <h4>Book Review</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Book</dt>
+        <dd class="col-sm-10">@Model.Book?.Title</dd>
+        <dt class="col-sm-2">Cover</dt>
+        <dd class="col-sm-10">
+            <img class="card-img"
+                 alt="Cover of @Model.Book.Title"
+                 src="@(Model.Book.UploadedCoverUrl)"
+                 onerror="this.onerror=null; this.src='@(Model.Book.CoverImageUrl ?? "https://placehold.co/200x300?text=No+cover")'" />
+        </dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Description)</dt>
+        <dd class="col-sm-10">
+            @{
+                var descriptionWithBreaks = new HtmlString(Model.Description
+                .Replace("\r\n", "<br />")
+                .Replace("\n", "<br />")
+                .Replace("\r", "<br />"));
+            }
+
+            @descriptionWithBreaks
+        </dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Rating)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Rating)</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.IsPublished)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.IsPublished)</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.CreatedBy)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.CreatedBy)</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.CreatedDate)</dt>
+        <dd class="col-sm-10">@Model.CreatedDate.ToLocalTime().ToString("g")</dd>
+    </dl>
+</div>
+<div>
+    @if (!Model.IsPublished)
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+        <span> | </span>
+    }
+    <a asp-action="Index">Back to List</a>
+</div>

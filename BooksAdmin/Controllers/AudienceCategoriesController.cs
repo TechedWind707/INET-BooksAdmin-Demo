@@ -1,7 +1,12 @@
 using BooksAdmin.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Auth0.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 
+[Authorize]
 public class AudienceCategoriesController : Controller
 {
     private readonly BooksAdminContext _context;

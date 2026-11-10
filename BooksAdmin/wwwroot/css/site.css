@@ -239,3 +239,7 @@ h1, h2, h3, h4, h5, h6 {
 .btn:focus{
     box-shadow: 0 
 }
+
+.navbar-expand-sm .navbar-nav {
+justify-content: flex-end;
+}

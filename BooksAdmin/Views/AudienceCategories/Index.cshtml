@@ -5,10 +5,12 @@
 }
 
 <h1>Audience Categories</h1>
-
-<p>
-    <a class="btn btn-primary" asp-action="Create">Add an audience category</a>
-</p>
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        <a class="btn btn-primary" asp-action="Create">Add an audience category</a>
+    </p>
+}
 
 <table class="table">
     <thead>
@@ -27,9 +29,20 @@
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
+                @if(User.IsInRole("Admin"))
+                {
+                <div>
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </div>
+                }
+                else
+                {
+                        <div>
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        </div>
+                    }
             </td>
         </tr>
 }

@@ -7,7 +7,11 @@
     <p class="lead">Keep track of the books you love, the ones on your list, and what you thought of them.</p>
     <div class="d-flex justify-content-center gap-2 mt-4">
         <a class="btn btn-dark btn-lg" asp-controller="Books" asp-action="Index">Browse books</a>
+        @{
+            if(User.IsInRole("Admin")){
         <a class="btn btn-outline-dark btn-lg" asp-controller="Books" asp-action="Create">Add a book</a>
+            }
+        }
     </div>
 </section>
 

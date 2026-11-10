@@ -19,15 +19,6 @@
                  onerror="this.onerror=null; this.src='@(Model.CoverImageUrl ?? "https://placehold.co/200x300?text=No+cover")'" />
     </dd>
     </dl>
-
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-    </dl>
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Author)
@@ -36,14 +27,14 @@
             @Html.DisplayFor(model => model.Author)
         </dd>
     </dl>
-    @* <dl class="row">
+    <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Genre)
+            <p>No Of Reviews</p>
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Genre)
+            @Model.BookReviews.Count
         </dd>
-    </dl> *@
+    </dl>
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Description)
@@ -62,7 +53,7 @@
     </dl>
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.YearPublished)
+           <p>Year Published</p>
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.YearPublished)
@@ -97,6 +88,5 @@
 
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

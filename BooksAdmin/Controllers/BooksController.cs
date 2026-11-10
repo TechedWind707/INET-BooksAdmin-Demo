@@ -3,8 +3,10 @@ using BooksAdmin.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 //using System.Net.Http;
 
+[Authorize]
 public class BooksController : Controller
 {
     private readonly BooksAdminContext _context;
@@ -55,6 +57,7 @@ public class BooksController : Controller
         var book = await _context.Book
             .Include (m => m.Genre)
             .Include(m => m.AudienceCategory)
+            .Include(m => m.BookReviews.Where(r => r.IsPublished))
             .FirstOrDefaultAsync(m => m.Id == id);
         if (book == null)
         {
@@ -64,6 +67,7 @@ public class BooksController : Controller
         return View(book);
     }
 
+    [Authorize(Roles = "Admin")]
     //GET: BOOKS/Create
     public IActionResult Create()
     {
@@ -76,6 +80,7 @@ public class BooksController : Controller
         return View();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("Id,Title,Author,GenreId,AudienceCategoryId,Description,YearPublished,Isbn")] Book book, IFormFile? ImageFile)
@@ -115,6 +120,7 @@ public class BooksController : Controller
     }
 
 
+    [Authorize(Roles = "Admin")]
     //GET: BOOKS/Edit/5
     public async Task<IActionResult> Edit(int? id)
     {
@@ -137,6 +143,7 @@ public class BooksController : Controller
         return View(book);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int? id, [Bind("Id,Title,Author,GenreId,AudienceCategoryId,Description,YearPublished,Isbn")] Book book, IFormFile? ImageFile)
@@ -209,6 +216,7 @@ public class BooksController : Controller
         return View(book);
     }
 
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null)
@@ -226,6 +234,7 @@ public class BooksController : Controller
         return View(book);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int? id)

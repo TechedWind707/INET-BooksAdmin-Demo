@@ -1,7 +1,9 @@
 using BooksAdmin.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+[Authorize]
 public class GenresController : Controller
 {
     private readonly BooksAdminContext _context;

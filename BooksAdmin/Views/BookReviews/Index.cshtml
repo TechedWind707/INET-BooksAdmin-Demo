@@ -1,0 +1,72 @@
+@model IEnumerable<BooksAdmin.Models.BookReview>
+
+@{
+    ViewData["Title"] = "Book Reviews";
+}
+
+<h1>Book Reviews</h1>
+
+<p>
+    <a class="btn btn-primary" asp-action="Create">Add a review</a>
+</p>
+
+@{
+        if (!Model.Any())
+        {
+            <tr>
+                <td colspan="7">No reviews found.</td>
+            </tr>
+        }
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>Book</th>
+            @*<th>@Html.DisplayNameFor(model => model.Description)</th>*@
+            <th>@Html.DisplayNameFor(model => model.Rating)</th>
+            <th>@Html.DisplayNameFor(model => model.IsPublished)</th>
+            <th>@Html.DisplayNameFor(model => model.CreatedBy)</th>
+            <th>@Html.DisplayNameFor(model => model.CreatedDate)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Book?.Title</td>
+                @*<td>@item.Description</td>*@
+                <td>@item.Rating</td>
+                <td>@item.IsPublished</td>
+                <td>@item.CreatedBy</td>
+                <td>@item.CreatedDate.ToLocalTime().ToString("g")</td>
+                <td>
+                    @*// @{
+                    //         if (Model.IsPublished)
+                    //         {
+                                
+                    //         }
+                    //     } *@
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    @{
+                            if (!item.IsPublished)
+                            {
+                                <a asp-action="Edit" asp-route-id="@item.Id">| Edit</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id">| Delete</a>
+                            }
+                        }
+                    
+                    
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+}
+
+@if (TempData["ErrorMessage"] is string errorMessage)
+{
+    <div class="alert alert-danger" role="alert">
+        @errorMessage
+    </div>
+}

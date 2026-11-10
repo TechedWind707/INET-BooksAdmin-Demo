@@ -41,7 +41,6 @@
       <th>Cover</th>
       <th>Title</th>
       <th>Author</th>
-      @* <th>Genre</th> *@
       <th>Year Published</th>
       <th>Actions</th>
     </tr>
@@ -58,13 +57,16 @@
                     </td>
                     <td><h3 class="card-title">@book.Title</h3></td>
                     <td><p class="card-text">@book.Author</p></td>
-                    @* <td><p class="card-text">@book.Genre</p></td> *@
                     <td><p class="card-text">@book.YearPublished</p></td>
                     <td>
                         <div style="display:flex; flex-direction:column; gap:10px">
                             <a asp-action="Details" asp-route-id="@book.Id" class="btn btn-sm btn-outline-secondary">Details</a>
-                            <a asp-action="Edit" asp-route-id="@book.Id" class="btn btn-sm btn-secondary">Edit</a>
-                            <a asp-action="Delete" asp-route-id="@book.Id" class="btn btn-sm btn-danger">Delete</a>
+                            @{
+                                if (User.IsInRole("Admin")){
+                                    <a asp-action="Edit" asp-route-id="@book.Id" class="btn btn-sm btn-secondary">Edit</a>
+                                    <a asp-action="Delete" asp-route-id="@book.Id" class="btn btn-sm btn-danger">Delete</a>
+                                }
+                            }
                         </div>
                     </td>
                 </tr>

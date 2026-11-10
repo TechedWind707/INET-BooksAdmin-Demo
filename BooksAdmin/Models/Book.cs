@@ -17,6 +17,8 @@ namespace BooksAdmin.Models
         public int AudienceCategoryId { get; set; }
         [Required]
         [Display(Prompt = "Title..")]
+
+        public List<BookReview> BookReviews { get; set; } = new List<BookReview>();
         public string Title { get; set; } = string.Empty;
 
         [Required]
