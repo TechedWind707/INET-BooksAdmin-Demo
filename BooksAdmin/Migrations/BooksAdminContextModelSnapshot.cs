@@ -139,6 +139,24 @@ namespace BooksAdmin.Migrations
                     b.ToTable("Genre");
                 });
 
+            modelBuilder.Entity("BooksAdmin.Models.UserSnapshot", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("UserSnapshot");
+                });
+
             modelBuilder.Entity("BooksAdmin.Models.Book", b =>
                 {
                     b.HasOne("BooksAdmin.Models.AudienceCategory", "AudienceCategory")
