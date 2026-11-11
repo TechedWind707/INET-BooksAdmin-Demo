@@ -24,10 +24,6 @@ namespace BooksAdmin.Models
         [Required]
         public string Author { get; set; } = string.Empty;
 
-
-        //        [Required]
-        //        public string Genre { get; set; } = string.Empty;
-
         [StringLength(1000)]
         public string Description { get; set; } = string.Empty;
 
@@ -47,5 +43,10 @@ namespace BooksAdmin.Models
         public string? CoverImageUrl =>
        string.IsNullOrWhiteSpace(Isbn) ? null
        : $"https://covers.openlibrary.org/b/isbn/{Isbn.Replace("-", "").Replace(" ", "")}-M.jpg?default=false";
+
+        [DisplayFormat(DataFormatString = "{0:MMMM d, yyyy}")]
+        [Display(Name = "Created")]
+        [Required]
+        public DateTime CreatedDate { get; set; } = DateTime.Now; // default to current timestamp
     }
 }

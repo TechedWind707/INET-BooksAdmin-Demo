@@ -14,6 +14,7 @@ namespace BooksAdmin.Controllers
         {
             var authenticationProperties = new LoginAuthenticationPropertiesBuilder()
                 .WithRedirectUri(returnUrl)
+                .WithParameter("prompt", "login")
                 .Build();
 
             await HttpContext.ChallengeAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);

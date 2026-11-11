@@ -6,10 +6,12 @@
 
 <h1>All Books</h1>
 
-<p>
-    <a class = "btn-primary btn" asp-action="Create">Add a book</a>
-</p>
-
+@if (User.IsInRole("Admin"))
+    {
+        <p>
+            <a class = "btn-primary btn" asp-action="Create">Add a book</a>
+        </p>
+    }
 <div class="row g-3">
 @*     @foreach (var book in Model)
     {
@@ -42,7 +44,9 @@
       <th>Title</th>
       <th>Author</th>
       <th>Year Published</th>
+      <th>CreatedDate</th>
       <th>Actions</th>
+
     </tr>
   </thead>
   <tbody>
@@ -58,6 +62,7 @@
                     <td><h3 class="card-title">@book.Title</h3></td>
                     <td><p class="card-text">@book.Author</p></td>
                     <td><p class="card-text">@book.YearPublished</p></td>
+                    <td><p class="card-text">@book.CreatedDate</p></td>
                     <td>
                         <div style="display:flex; flex-direction:column; gap:10px">
                             <a asp-action="Details" asp-route-id="@book.Id" class="btn btn-sm btn-outline-secondary">Details</a>

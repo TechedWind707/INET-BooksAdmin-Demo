@@ -50,12 +50,18 @@ public class BookReviewsController : Controller
     }
 
     // GET: BookReviews/Create
-    public async Task<IActionResult> Create()
+    public async Task<IActionResult> Create(int? bookId)
     {
-        await PopulateBooksAsync();
-        return View();
+        if (bookId.HasValue && !await _context.Book.AnyAsync(book => book.Id == bookId.Value))
+        {
+            return NotFound();
+        }
+
+        ViewBag.BookWasPassed = bookId.HasValue;
+        await PopulateBooksAsync(bookId);
+        return View(new BookReview { BookId = bookId ?? 0 });
     }
-    
+
     // POST: BookReviews/Create
     [Authorize]
     [HttpPost]

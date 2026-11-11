@@ -23,6 +23,16 @@ builder.Services.AddAuth0WebAppAuthentication(options =>
 });
 builder.Services.Configure<OpenIdConnectOptions>(Auth0Constants.AuthenticationScheme, options =>
 {
+    options.Events.OnRemoteFailure = context =>
+    {
+        context.HandleResponse();
+
+        context.Response.Redirect(
+            "/?loginError=cancelled");
+
+        return Task.CompletedTask;
+    };
+
     options.TokenValidationParameters = new TokenValidationParameters
     {
         NameClaimType = "name",

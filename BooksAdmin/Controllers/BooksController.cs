@@ -83,7 +83,7 @@ public class BooksController : Controller
     [Authorize(Roles = "Admin")]
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,Title,Author,GenreId,AudienceCategoryId,Description,YearPublished,Isbn")] Book book, IFormFile? ImageFile)
+    public async Task<IActionResult> Create([Bind("Id,Title,Author,GenreId,AudienceCategoryId,Description,YearPublished,Isbn,CreatedDate")] Book book, IFormFile? ImageFile)
     {
         var allowedTypes = new[] { "image/jpeg", "image/png", "image/webp" };
         var extension = Path.GetExtension(ImageFile.FileName).ToLowerInvariant();
@@ -112,6 +112,8 @@ public class BooksController : Controller
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        book.CreatedDate = DateTime.UtcNow;
+
         var genres = _context.Genre.ToList();
         ViewBag.GenreId = new SelectList(genres, "Id", "Title");
         var categories = _context.AudienceCategory.ToList();
@@ -212,6 +214,14 @@ public class BooksController : Controller
         ViewBag.GenreId = new SelectList(genres, "Id", "Title");
         var categories = _context.AudienceCategory.ToList();
         ViewBag.AudienceCategoryId = new SelectList(categories, "Id", "Title");
+
+        var originalBook = await _context.Book.AsNoTracking().FirstOrDefaultAsync(b => b.Id == book.Id);
+        if (originalBook == null)
+        {
+            return NotFound();
+        }
+
+        book.CreatedDate = originalBook.CreatedDate; // Preserve the original CreatedDate
 
         return View(book);
     }

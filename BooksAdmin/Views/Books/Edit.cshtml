@@ -65,6 +65,12 @@
             </div>
 
             <div class="mb-3">
+                <label asp-for="CreatedDate" class="form-label"></label>
+                <input asp-for="CreatedDate" class="form-control bg-light" readonly />
+                <span asp-validation-for="CreatedDate" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
                 <label class="control-label">Image</label>
                 <input accept="image/*" type="file" id="ImageFile" name="ImageFile" class="form-control" />
                 @Html.ValidationMessage("ImageFile", new { @class = "text-danger" })
