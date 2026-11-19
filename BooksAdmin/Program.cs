@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 //using System.Net.Http;
 var builder = WebApplication.CreateBuilder(args);
-Console.WriteLine(builder.Configuration.GetConnectionString("BooksAdminContext"));
+//Console.WriteLine(builder.Configuration.GetConnectionString("BooksAdminContext"));
 var connectionString = builder.Configuration.GetConnectionString("BooksAdminContext") ?? throw new InvalidOperationException("Connection string 'BooksAdminContext' not found.");
 
 builder.Services.AddDbContext<BooksAdminContext>(options => options.UseSqlServer(connectionString));
