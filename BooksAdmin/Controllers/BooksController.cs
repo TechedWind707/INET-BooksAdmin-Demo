@@ -85,28 +85,31 @@ public class BooksController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("Id,Title,Author,GenreId,AudienceCategoryId,Description,YearPublished,Isbn,CreatedDate")] Book book, IFormFile? ImageFile)
     {
-        var allowedTypes = new[] { "image/jpeg", "image/png", "image/webp" };
-        var extension = Path.GetExtension(ImageFile.FileName).ToLowerInvariant();
-
-        // Manually add a validation failure
-        if (ImageFile == null || ImageFile.Length == 0
-            )
+        // An uploaded image is optional. Only check it when a file was chosen.
+        if (ImageFile != null && ImageFile.Length > 0)
         {
-            ModelState.AddModelError("ImageFile", "The image file is required.");
+            var allowedTypes = new[] { "image/jpeg", "image/png", "image/webp" };
+            var extension = Path.GetExtension(ImageFile.FileName).ToLowerInvariant();
+
+            if (!allowedTypes.Contains(ImageFile.ContentType) ||
+                extension is not ".jpg" and not ".jpeg" and not ".png" and not ".webp")
+            {
+                ModelState.AddModelError("ImageFile", "Upload a JPG, PNG, or WebP image.");
+            }
         }
 
-        if (!allowedTypes.Contains(ImageFile.ContentType) || extension is not ".jpg" and not ".joeg" and not ".png" and not ".webp")
+        if (ModelState.IsValid)
         {
-            ModelState.AddModelError("ImageFile", "Upload a JPG, PNG, or WebP image.");
-        }
-            if (ModelState.IsValid)
-        {
-            // Generate a unique file name for the uploaded image
+            if (ImageFile != null && ImageFile.Length > 0)
+            {
                 var fileName = $"{Guid.NewGuid()}{Path.GetExtension(ImageFile.FileName)}";
-                // Upload the image to Azure Blob Storage and get the URL
-                var imageUrl = await _blobService.UploadFileAsync(ImageFile, fileName);
-                // Set the UploadedCoverUrl property of the book to the uploaded image URL
-                book.UploadedCoverUrl = imageUrl;
+                book.UploadedCoverUrl = await _blobService.UploadFileAsync(ImageFile, fileName);
+            }
+            else if (!string.IsNullOrWhiteSpace(book.Isbn))
+            {
+                // No upload: use the cover Open Library serves for this ISBN.
+                book.UploadedCoverUrl = book.CoverImageUrl;
+            }
 
             _context.Add(book);
             await _context.SaveChangesAsync();
